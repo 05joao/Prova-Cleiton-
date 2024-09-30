@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Nome da Planta -->
+    <EditText
+        android:id="@+id/plant_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome da Planta" />
+
+    <!-- Data de Plantio -->
+    <EditText
+        android:id="@+id/plant_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Data de Plantio (dd/mm/yyyy)" />
+
+    <!-- Nível de água -->
+    <EditText
+        android:id="@+id/water_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nível de Água (baixo, médio, alto)" />
+
+    <!-- Botão de adicionar planta -->
+    <Button
+        android:id="@+id/add_plant_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Planta" />
+
+    <!-- Lista de Plantas -->
+    <ListView
+        android:id="@+id/plant_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Main 
+
+
+package com.example.verdejar
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.verdejaredition.R
+
+class MainActivity : AppCompatActivity() {
+
+    // Lista para armazenar as plantas
+    private val plants = mutableListOf<String>()
+    private lateinit var plantAdapter: ArrayAdapter<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Referências aos componentes do layout
+        val plantNameEditText = findViewById<EditText>(R.id.plant_name)
+        val plantDateEditText = findViewById<EditText>(R.id.plant_date)
+        val waterLevelEditText = findViewById<EditText>(R.id.water_level)
+        val addPlantButton = findViewById<Button>(R.id.add_plant_button)
+        val plantListView = findViewById<ListView>(R.id.plant_list)
+
+        // Inicializa o adaptador da lista
+        plantAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, plants)
+        plantListView.adapter = plantAdapter
+
+        // Ação do botão de adicionar planta
+        addPlantButton.setOnClickListener {
+            val plantName = plantNameEditText.text.toString()
+            val plantDate = plantDateEditText.text.toString()
+            val waterLevel = waterLevelEditText.text.toString()
+
+            // Verifica se os campos estão preenchidos
+            if (plantName.isNotEmpty() && plantDate.isNotEmpty() && waterLevel.isNotEmpty()) {
+                // Adiciona planta na lista
+                val plantInfo = "Planta: $plantName, Data: $plantDate, Água: $waterLevel"
+                plants.add(plantInfo)
+                plantAdapter.notifyDataSetChanged()
+
+                // Limpa os campos
+                plantNameEditText.text.clear()
+                plantDateEditText.text.clear()
+                waterLevelEditText.text.clear()
+            } else {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
